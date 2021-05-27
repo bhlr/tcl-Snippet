@@ -43,6 +43,35 @@ if {$goto_next} {
     set next_unit_index  [expr [lsearch -exact -regexp $tree $unit_id] + 1]
     ns_log notice "--- entra a esta parte Ganar 1 $tree , $next_unit_index "
     
+
+    set has_obj 0
+    while {$has_obj  < 1} {
+	ns_log notice "--- entra a esta parte buscar vacios 1 $next_unit_index"
+	if {$next_unit_index < [llength $tree]} {
+	    set unit_id [lindex $tree $next_unit_index 0]
+	    
+	    ### posible unidad vacia
+	    
+	    ns_log notice "--- entra a esta parte vacio $unit_id"
+	    set nex_unit_tree [category_tree::get_tree -subtree_id  $unit_id $tree_id]
+	    set next_activity [lindex $nex_unit_tree [lsearch -exact -regexp $nex_unit_tree $activity_name] 0]
+	    set numObjects [llength [learning_content::category::get_ready_objects -category_id $next_activity]]
+	    ns_log notice "--- entra a esta parte buscar vacios 2 $next_unit_index :: unit $unit_id ::  activity $next_activity :: objects $numObjects"
+	    if {$numObjects eq 0} {
+		ns_log notice "--- entra a esta parte buscar vacios 3 $next_unit_index :: unit $unit_id ::  activity $next_activity :: objects $numObjects"
+		incr next_unit_index 1
+		continue
+	    } else {
+		ns_log notice "--- entra a esta parte buscar vacios 4 $next_unit_index :: unit $unit_id ::  activity $next_activity :: objects $numObjects"
+		
+		incr has_obj  1
+	    }
+	} else {
+	    Break
+	}
+    }
+    
+
     if {$next_unit_index < [llength $tree]} {
 	ns_log notice "--- entra a esta parte Ganar 2"
 	set unit_id [lindex $tree $next_unit_index 0]
